@@ -150,6 +150,55 @@ const createApplication = async (req, res, next) => {
 };
 
 /*
+	PATCH /applications/:applicationId/course
+*/
+const submitCourseResult = async (req, res, next) => {
+	try {
+		const applicationId = req.params.applicationId;
+
+		const isValidApplicationId = mongoose.Types.ObjectId.isValid(applicationId);
+
+		if (!isValidApplicationId) {
+			return res.status(400).json({
+				message: "Invalid application id",
+			});
+		}
+
+		const nextCourseStatus = req.body.courseStatus;
+		const allowedCourseStatuses = ["passed", "failed"];
+
+		if (!allowedCourseStatuses.includes(nextCourseStatus)) {
+			return res.status(400).json({
+				message: "courseStatus must be passed or failed",
+			});
+		}
+
+		const application = await Application.findById(applicationId);
+
+		if (!application) {
+			return res.status(404).json({
+				message: "Application not found",
+			});
+		}
+
+		if (String(application.adopterId) !== String(req.user._id)) {
+			return res.status(403).json({
+				message: "Forbidden",
+			});
+		}
+
+		application.courseStatus = nextCourseStatus;
+		await application.save();
+
+		res.json({
+			data: application,
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
+/*
 	PATCH /applications/:applicationId/review
 */
 const reviewApplication = async (req, res, next) => {
@@ -243,5 +292,6 @@ const reviewApplication = async (req, res, next) => {
 module.exports = {
 	listApplications,
 	createApplication,
+	submitCourseResult,
 	reviewApplication,
 };

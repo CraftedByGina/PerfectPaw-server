@@ -13,13 +13,13 @@ Beginner-friendly CJS backend for the HomeForPaws frontend using Express + Mongo
 ```
 .
 ├── app.js
+├── package.json
+├── package-lock.json
 ├── controllers/
 ├── db/
 ├── middleware/
 ├── models/
-├── routes/
-├── scripts/
-└── utils/
+└── routes/
 ```
 
 ## Data Relationships
@@ -67,17 +67,14 @@ npm run seed:pets
 ## API Endpoints
 
 - `GET /` : quick API check
+
 - `GET /api/pets` : list pets
 - `GET /api/pets/:petId` : single pet details
-- `POST /api/pets` : create a pet (requires shelter_admin `x-user-id` header)
+- `POST /api/pets` : create a pet (requires shelter_admin JWT)
 - `GET /api/applications` : list adoption applications
-- `POST /api/applications` : submit adoption application (requires adopter `x-user-id` header)
+- `POST /api/applications` : submit adoption application (requires adopter JWT)
 
-## Protected Route Auth (temporary)
-
-Until JWT auth is added, protected write routes use this header:
-
-- `x-user-id: <User._id>`
+##
 
 Role enforcement:
 
