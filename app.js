@@ -10,6 +10,7 @@ const apiRoutes = require("./routes");
 const notFound = require("./middleware/notFound");
 const errorHandler = require("./middleware/errorHandler");
 const connectMongo = require("./db/connectMongo");
+const { oauthBridge } = require("./controllers/auth.controller");
 
 dotenv.config();
 
@@ -70,6 +71,17 @@ app.get("/signup", (req, res) => {
     authorizationParams: { screen_hint: "signup" },
   });
 });
+
+const googleLogin = (req, res) =>
+  res.oidc.login({
+    returnTo: "/oauth/bridge",
+    authorizationParams: { connection: "google-oauth2" },
+  });
+
+app.get("/oauth/login", googleLogin);
+app.get("/oauth/signup", googleLogin);
+
+app.get("/oauth/bridge", requiresAuth(), oauthBridge);
 
 app.get("/profile", requiresAuth(), (req, res) => {
   res.json({
