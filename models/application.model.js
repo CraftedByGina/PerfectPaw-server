@@ -25,6 +25,54 @@ const applicationSchema = new mongoose.Schema(
       default: "",
       trim: true,
     },
+    phone: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    address: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    city: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    state: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    zipCode: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    housingType: {
+      type: String,
+      enum: ["apartment", "house", "condo", ""],
+      default: "",
+    },
+    hasYard: {
+      type: Boolean,
+      default: false,
+    },
+    hasOtherPets: {
+      type: Boolean,
+      default: false,
+    },
+    petExperience: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    reasonForAdoption: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     status: {
       type: String,
       enum: ["submitted", "reviewing", "approved", "rejected", "withdrawn"],
