@@ -11,6 +11,7 @@
     "seed:pets": "node scripts/seedPets.js",
     "seed:applications": "node scripts/seedApplications.js",
     "seed:all": "npm run seed:users && npm run seed:shelters && npm run seed:pets && npm run seed:applications",
+    "reset:db": "node scripts/resetDatabase.js",
     "test": "echo \"No tests yet\""
   },
   "repository": {

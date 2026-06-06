@@ -25,6 +25,11 @@ const shelterSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+    address: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     city: {
       type: String,
       trim: true,
@@ -34,6 +39,65 @@ const shelterSchema = new mongoose.Schema(
       type: String,
       trim: true,
       default: "",
+    },
+    zipCode: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    website: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    facebookUrl: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    instagramUrl: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    licenseNumber: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    missionStatement: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    animalTypes: {
+      type: [String],
+      default: [],
+    },
+    yearsOperating: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    approvalStatus: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "pending",
+      index: true,
+    },
+    reviewNotes: {
+      type: String,
+      trim: true,
+      default: "",
+    },
+    reviewedAt: {
+      type: Date,
+      default: null,
+    },
+    reviewedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
     },
     isVerified: {
       type: Boolean,
