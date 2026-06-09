@@ -1,35 +1,33 @@
 require("dotenv").config();
 
+
 const mongoose = require("mongoose");
 const connectMongo = require("../db/connectMongo");
 const User = require("../models/user.model");
+const bcrypt = require("bcryptjs")
 
 const SEED_USERS = [
   {
     fullName: " Admin Shelter One",
     email: "seed-shelter-admin@perfectpaw.local",
-    passwordHash: "seed-placeholder-passwordhash",
     role: "shelter_admin",
     isActive: true,
   },
   {
     fullName: "  Adopter One",
     email: "seed-adopter-1@perfectpaw.local",
-    passwordHash: "seed-placeholder-passwordhash",
     role: "adopter",
     isActive: true,
   },
   {
     fullName: " Adopter Two",
     email: "seed-adopter-2@perfectpaw.local",
-    passwordHash: "seed-placeholder-passwordhash",
     role: "adopter",
     isActive: true,
   },
   {
     fullName: " Admin Super Admin",
     email: "seed-super-admin@perfectpaw.local",
-    passwordHash: "seed-placeholder-passwordhash",
     role: "super_admin",
     isActive: true,
   },
@@ -43,12 +41,20 @@ async function seedUsers() {
   }
 
   await connectMongo(mongoUri);
+  const passwordHash = await bcrypt.hash("Password123!", 10);
 
   const emails = SEED_USERS.map((u) => u.email);
 
   await User.deleteMany({ email: { $in: emails } });
 
-  const insertedUsers = await User.insertMany(SEED_USERS);
+  const usersWithPasswords = SEED_USERS.map((user) => {
+    return {
+      ...user,
+      passwordHash: passwordHash,
+    };
+  });
+  
+  const insertedUsers = await User.insertMany(usersWithPasswords);
 
   console.log(`Seed complete. Inserted ${insertedUsers.length} users.`);
 }

@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
+const Shelter = require("../models/shelter.model");
 
 const signToken = (user, jwtSecret) =>
   jwt.sign(
@@ -31,6 +32,17 @@ const register = async (req, res, next) => {
     const email = (req.body.email || "").trim().toLowerCase();
     const password = req.body.password || "";
     const requestedRole = req.body.role;
+    const shelterName = (req.body.shelterName || "").trim()
+    const contactPhone = (req.body.contactPhone || "").trim()
+    const address = (req.body.address || "").trim()
+    const city = (req.body.city || "").trim()
+    const state = (req.body.state || "").trim()
+    const zipCode = (req.body.zipCode || "").trim()
+    const website = (req.body.website || "").trim()
+    const licenseNumber = (req.body.licenseNumber || "").trim()
+    const missionStatement = (req.body.missionStatement || "").trim()
+    const yearsOperating = Number(req.body.yearsOperating || 0)
+    const animalTypes = Array.isArray(req.body.animalTypes) ? req.body.animalTypes : []
 
     if (!email || !password) {
       return res.status(400).json({
@@ -42,6 +54,12 @@ const register = async (req, res, next) => {
       return res.status(400).json({
         message: "password must be at least 8 characters",
       });
+    }
+
+    if (requestedRole === 'shelter_admin' && !shelterName) {
+      return res.status(400).json({
+        message: 'ShelterName is required for shelter accounts'
+      })
     }
 
     const allowedRoles = ["adopter", "shelter_admin"];
@@ -65,6 +83,27 @@ const register = async (req, res, next) => {
       isActive: true,
     });
 
+    let shelter = null;
+
+    if (role === "shelter_admin"){
+      shelter = await Shelter.create({
+        adminUserId: user._id,
+        name: shelterName,
+        contactEmail: email,
+        contactPhone,
+        address,
+        city,
+        state,
+        zipCode,
+        website,
+        licenseNumber,
+        missionStatement,
+        animalTypes,
+        yearsOperating,
+        approvalStatus:"pending",
+        isVerified: false,
+      })
+    }
     const token = jwt.sign(
       {
         sub: String(user._id),
@@ -82,6 +121,8 @@ const register = async (req, res, next) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
+        shelterId:shelter? shelter._id: "",
+        shelterStatus: shelter? shelter.approvalStatus: ""
       },
     });
   } catch (error) {
