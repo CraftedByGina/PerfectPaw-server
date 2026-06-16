@@ -1,10 +1,11 @@
 const express = require("express");
 
 const {
-	listPets,
-	getPetById,
-	createPet,
-	deletePet,
+  listPets,
+  getPetById,
+  createPet,
+  updatePet,
+  deletePet,
 } = require("../controllers/pets.controller");
 
 const attachCurrentUser = require("../middleware/attachCurrentUser");
