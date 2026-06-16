@@ -18,15 +18,21 @@ const petSchema = new mongoose.Schema(
       enum: ["Dog", "Cat"],
       required: true,
     },
+    breed: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     sex: {
       type: String,
       enum: ["Male", "Female"],
       required: true,
     },
-    age: {
+    ageMonths: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
+      max: 240,
     },
     ageGroup: {
       type: String,

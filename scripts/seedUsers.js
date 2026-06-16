@@ -27,7 +27,7 @@ const SEED_USERS = [
   },
   {
     fullName: " Admin Super Admin",
-    email: "seed-super-admin@perfectpaw.local",
+    email: "gina_super_admin@perfectpaw.com",
     role: "super_admin",
     isActive: true,
   },
