@@ -108,6 +108,46 @@ const getUploadedPetImageUrl = async (req, options = {}) => {
   return uploadPetImageToCloudinary(req.file);
 };
 
+const addUniqueImageToken = (imageUrl, petId) => {
+  if (!imageUrl || !petId) return imageUrl;
+
+  try {
+    const url = new URL(imageUrl);
+    url.searchParams.set("pet", String(petId));
+    return url.toString();
+  } catch {
+    return imageUrl;
+  }
+};
+
+const serializePetsWithUniqueImages = (pets) => {
+  const imageCounts = {};
+
+  pets.forEach((pet) => {
+    const imageUrl = pet.imageUrl || "";
+
+    if (!imageCounts[imageUrl]) {
+      imageCounts[imageUrl] = 0;
+    }
+
+    imageCounts[imageUrl] += 1;
+  });
+
+  return pets.map((pet) => {
+    const plainPet = pet.toObject();
+    const imageUrl = plainPet.imageUrl || "";
+
+    if (imageUrl && imageCounts[imageUrl] > 1) {
+      return {
+        ...plainPet,
+        imageUrl: addUniqueImageToken(imageUrl, plainPet._id),
+      };
+    }
+
+    return plainPet;
+  });
+};
+
 /*
   GET /pets
 
@@ -148,7 +188,7 @@ const listPets = async (req, res, next) => {
       .sort({ createdAt: -1 });
 
     res.json({
-      data: pets,
+      data: serializePetsWithUniqueImages(pets),
     });
   } catch (error) {
     next(error);
