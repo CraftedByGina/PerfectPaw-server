@@ -6,9 +6,9 @@ const Shelter = require("../models/shelter.model");
 const isCloudinaryConfigured = () =>
   Boolean(
     process.env.CLOUDINARY_URL ||
-      (process.env.CLOUDINARY_CLOUD_NAME &&
-        process.env.CLOUDINARY_API_KEY &&
-        process.env.CLOUDINARY_API_SECRET)
+    (process.env.CLOUDINARY_CLOUD_NAME &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.CLOUDINARY_API_SECRET)
   );
 
 const configureCloudinary = () => {
@@ -150,11 +150,6 @@ const serializePetsWithUniqueImages = (pets) => {
 
 /*
   GET /pets
-
-  Optional query params:
-  ?search=max
-  ?status=adopted
-  ?shelterId=123
 */
 const listPets = async (req, res, next) => {
   try {
@@ -261,6 +256,11 @@ const createPet = async (req, res, next) => {
       ageMonths: req.body.ageMonths,
       ageGroup: req.body.ageGroup,
       size: req.body.size,
+      energyLevel: req.body.energyLevel,
+      goodForApartments: req.body.goodForApartments,
+      goodWithKids: req.body.goodWithKids,
+      goodWithOtherPets: req.body.goodWithOtherPets,
+      exerciseNeeds: req.body.exerciseNeeds,
       imageUrl,
       traits: parseTraits(req.body.traits),
       blurb: req.body.blurb,
@@ -328,6 +328,11 @@ const updatePet = async (req, res, next) => {
     if (req.body.ageMonths !== undefined) pet.ageMonths = req.body.ageMonths;
     if (req.body.ageGroup !== undefined) pet.ageGroup = req.body.ageGroup;
     if (req.body.size !== undefined) pet.size = req.body.size;
+    if (req.body.energyLevel !== undefined) pet.energyLevel = req.body.energyLevel;
+    if (req.body.goodForApartments !== undefined) pet.goodForApartments = req.body.goodForApartments;
+    if (req.body.goodWithKids !== undefined) pet.goodWithKids = req.body.goodWithKids;
+    if (req.body.goodWithOtherPets !== undefined) pet.goodWithOtherPets = req.body.goodWithOtherPets;
+    if (req.body.exerciseNeeds !== undefined) pet.exerciseNeeds = req.body.exerciseNeeds;
     if (imageUrl !== undefined) pet.imageUrl = imageUrl;
     if (req.body.traits !== undefined) pet.traits = parseTraits(req.body.traits);
     if (req.body.blurb !== undefined) pet.blurb = req.body.blurb;

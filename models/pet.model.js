@@ -48,6 +48,31 @@ const petSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    energyLevel: {
+      type: String,
+      enum: ["Low", "Medium", "High"],
+      default: "Medium",
+    },
+    goodForApartments: {
+      type: String,
+      enum: ["yes", "no", "unknown"],
+      default: "unknown",
+    },
+    goodWithKids: {
+      type: String,
+      enum: ["yes", "no", "unknown"],
+      default: "unknown",
+    },
+    goodWithOtherPets: {
+      type: String,
+      enum: ["yes", "no", "unknown"],
+      default: "unknown",
+    },
+    exerciseNeeds: {
+      type: String,
+      enum: ["Low", "Moderate", "High"],
+      default: "Moderate",
+    },
     traits: {
       type: [String],
       default: [],
