@@ -1,7 +1,7 @@
 const { z } = require("zod");
 
 const matchSchema = z.object({
-    quizSummary:z.string(),
+    quizSummary: z.string(),
     matches: z.array(
         z.object({
             petId: z.string(),
@@ -17,7 +17,7 @@ const getChatModel = async () => {
 
     return new ChatAnthropic({
         apiKey: process.env.ANTHROPIC_API_KEY,
-        model: process.env.ANTHROPIC_MODEL,
+        model: process.env.ANTHROPIC_MODEL || "claude-haiku-4-5-20251001",
         temperature: 0.4,
     });
 }
@@ -44,7 +44,7 @@ const matchPetsForAdopter = async({ preferences, pets}) => {
     const model = await getChatModel();
     const structuredModel = model.withStructuredOutput(matchSchema);
 
-    const petsummaries = pets.map(buildPetSummary);
+    const petSummaries = pets.map(buildPetSummary);
     return structuredModel.invoke([
         {
             role:'system',
@@ -55,10 +55,9 @@ const matchPetsForAdopter = async({ preferences, pets}) => {
             role:"user",
             content: JSON.stringify({
                 adopterPreferences:preferences,
-                availablePets: petsummaries,
+                availablePets: petSummaries,
                instructions:
-               "Rank the best 3 to 5 pets. Use the adopter's hobbies, home vibe, weekend style, energy preference, experience level, and practical living situation. Prioritize shelter-provided fields like energyLevel, exerciseNeeds, goodForApartments, goodWithKids, goodWithOtherPets, traits, and blurb. Do not recommend pets based only on breed.Treat unknown compatibility fields as unknown, not as a negative. Do not penalize a pet for missing compatibility information unless the adopter has a strict requirement. Breed can be considered, but the individual pet's details matter more. Keep the tone warm, fun, and adoption-focused."
-            }),
+               "Create quizSummary as 1-2 short sentences written directly to the user using 'you' and 'your'. Do not say 'this adopter'. Start naturally, like 'You are looking for...' or 'You would do best with...'. Keep quizSummary under 35 words. Then rank the best 3 to 5 pets. Use the adopter's hobbies, home vibe, weekend style, energy preference, experience level, and practical living situation. Prioritize shelter-provided fields like energyLevel, exerciseNeeds, goodForApartments, goodWithKids, goodWithOtherPets, traits, and blurb. Do not recommend pets based only on breed. Treat unknown compatibility fields as unknown, not as a negative. Breed can be considered, but the individual pet's details matter more. Keep the tone warm, fun, and adoption-focused." }),
         },
     ]);
 };
