@@ -205,15 +205,26 @@ const login = async (req, res, next) => {
   GET /auth/me
 
 */
-const me = async (req, res) => {
+const me = async (req, res, next) => {
+  try {
+    const shelter = req.user.role === "shelter_admin"
+      ? await Shelter.findOne({ adminUserId: req.user._id }).select("_id name approvalStatus")
+      : null;
+
   res.json({
     user: {
       _id: req.user._id,
       fullName: req.user.fullName,
       email: req.user.email,
       role: req.user.role,
+      shelterId: shelter?._id || "",
+      shelterName: shelter?.name || "",
+      shelterStatus: shelter?.approvalStatus || "",
     },
   });
+  } catch (error) {
+    next(error);
+  }
 };
 
 /*
