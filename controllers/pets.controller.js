@@ -41,7 +41,7 @@ const uploadPetImageToCloudinary = (file) =>
   new Promise((resolve, reject) => {
     if (!isCloudinaryConfigured()) {
       const error = new Error("Cloudinary is not configured for pet image uploads");
-      error.statusCode = 500;
+      error.statusCode = 503;
       reject(error);
       return;
     }
@@ -55,6 +55,7 @@ const uploadPetImageToCloudinary = (file) =>
       },
       (error, result) => {
         if (error) {
+          error.statusCode = error.http_code || error.statusCode || 400;
           reject(error);
           return;
         }

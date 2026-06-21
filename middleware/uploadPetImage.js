@@ -1,7 +1,7 @@
 const multer = require("multer");
 
 const imageStorage = multer.memoryStorage();
-const maxPetImageSizeMb = 30;
+const maxPetImageSizeMb = 10;
 const maxPetImageSizeBytes = maxPetImageSizeMb * 1024 * 1024;
 
 const petImageUpload = multer({
