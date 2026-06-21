@@ -1,56 +1,65 @@
-# PerfectPaw-server
+# PerfectPaw Server
 
-Beginner-friendly CJS backend for the HomeForPaws frontend using Express + MongoDB (Mongoose).
+Backend API for PerfectPaw, a pet adoption platform for adopters and shelters. The server handles authentication, role-based access, pet listings, shelter dashboards, adoption applications, Cloudinary image uploads, and an AI-powered pet matching agent.
 
 ## Stack
 
-- Node.js + Express (CommonJS)
+- Node.js
+- Express
 - MongoDB + Mongoose
-- CORS, Helmet, Morgan, Dotenv
+- JWT + bcrypt
+- Auth0 Google OAuth
+- Cloudinary + Multer
+- LangChain + Anthropic
 
-## Project Structure
+## Architecture
 
+```mermaid
+flowchart LR
+  Client[React Client] --> API[Express API]
+  API --> Auth[JWT Auth + Google OAuth]
+  API --> DB[(MongoDB)]
+  API --> Cloudinary[Cloudinary Images]
+  API --> Agent[LangChain + Anthropic Agent]
+  Agent --> DB
 ```
-.
-├── app.js
-├── package.json
-├── package-lock.json
-├── controllers/
-├── db/
-├── middleware/
-├── models/
-└── routes/
-```
 
-## Data Relationships
+## Backend Highlights
 
-- One User can be an adopter, shelter_admin, or super_admin.
-- One Shelter belongs to one shelter_admin user.
-- One Shelter has many Pets.
-- One Application connects one Adopter user to one Pet and one Shelter.
+- Secure auth with bcrypt password hashing, JWT sessions, and Google OAuth support.
+- Role-based access for adopters, shelter admins, and platform admins.
+- Shelter approval flow before shelter accounts can publish pet listings.
+- Cloudinary uploads for optimized pet photos instead of storing images in the database.
+- AI pet matching endpoint that returns structured recommendations using LangChain and Anthropic.
+- MongoDB relationships between users, shelters, pets, and adoption applications.
 
-Main references:
+## Main Routes
 
-- Pet.shelterId -> Shelter._id
-- Application.petId -> Pet._id
-- Application.adopterId -> User._id
-- Application.shelterId -> Shelter._id
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/pets`
+- `POST /api/pets`
+- `GET /api/applications`
+- `POST /api/applications`
+- `POST /api/agent/match`
 
 ## Setup
-
-1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Create environment file:
+Create a `.env` file and add the needed values:
 
 ```bash
-cp .env.example .env
+MONGO_URI=
+JWT_SECRET=
+CORS_ORIGIN=
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+ANTHROPIC_API_KEY=
 ```
-
-3. Add your Mongo URI in `.env`.
 
 ## Run
 
@@ -58,58 +67,10 @@ cp .env.example .env
 npm run dev
 ```
 
-## Seed Starter Pets
+## Seed Data
+
+The `scripts/` folder includes seed files for adding starter users, shelters, pets, and applications to MongoDB. Use this when setting up the project locally or resetting demo data.
 
 ```bash
-npm run seed:pets
+npm run seed:all
 ```
-
-## API Endpoints
-
-- `GET /` : quick API check
-
-- `GET /api/pets` : list pets
-- `GET /api/pets/:petId` : single pet details
-- `POST /api/pets` : create a pet (requires shelter_admin JWT)
-- `GET /api/applications` : list adoption applications
-- `POST /api/applications` : submit adoption application (requires adopter JWT)
-
-##
-
-Role enforcement:
-
-- `POST /api/pets` only allows users with role `shelter_admin`.
-- `POST /api/applications` only allows users with role `adopter`.
-
-The server ignores any client-sent `adopterId` for applications and uses the authenticated user id.
-For pet creation, the server uses the shelter linked to the authenticated shelter admin.
-
-### POST /api/pets Body (minimum)
-
-```json
-{
-	"shelterId": "<shelter_object_id>",
-	"name": "Buddy",
-	"species": "Dog",
-	"sex": "Male",
-	"age": 2,
-	"ageGroup": "Young",
-	"size": "Large"
-}
-```
-
-### POST /api/applications Body (minimum)
-
-```json
-{
-	"petId": "<pet_object_id>",
-	"adopterId": "<user_object_id>",
-	"message": "I have a fenced yard and experience with large dogs."
-}
-```
-
-## Frontend Fit (HomeForPaws)
-
-- Your current frontend uses local data in `src/data/pets.js`.
-- This backend provides matching pet fields (`name`, `sex`, `age`, `ageGroup`, `size`, `traits`, `blurb`, `imageUrl`) so you can switch from local array to API fetch smoothly.
-- Tailwind in frontend does not require backend changes; only `CORS_ORIGIN` needs to match your client URL.

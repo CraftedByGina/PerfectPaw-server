@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const connectMongo = require("../db/connectMongo");
 const Pet = require("../models/pet.model");
 const Shelter = require("../models/shelter.model");
-const User = require("../models/user.model");
 
 const PETS = [
   {
@@ -15,6 +14,11 @@ const PETS = [
     ageMonths: 24,
     ageGroup: "Young",
     size: "Large",
+    energyLevel: "High",
+    goodForApartments: "no",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "High",
     imageUrl: "https://placedog.net/800/600?id=1",
     traits: ["Friendly", "Active", "Good with kids", "Good with dogs"],
     blurb: "Loves fetch, belly rubs, and long walks with people.",
@@ -27,6 +31,11 @@ const PETS = [
     ageMonths: 18,
     ageGroup: "Young",
     size: "Small",
+    energyLevel: "Low",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Sweet", "Calm", "Good with cats", "Litter trained"],
     blurb: "A gentle window watcher who warms up with soft voices.",
@@ -39,6 +48,11 @@ const PETS = [
     ageMonths: 48,
     ageGroup: "Adult",
     size: "Large",
+    energyLevel: "Medium",
+    goodForApartments: "no",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Moderate",
     imageUrl: "https://placedog.net/800/600?id=2",
     traits: ["Gentle", "Smart", "Good with kids", "Leash trained"],
     blurb: "A loyal companion who thinks he's a lap dog.",
@@ -51,6 +65,11 @@ const PETS = [
     ageMonths: 60,
     ageGroup: "Adult",
     size: "Medium",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Moderate",
     imageUrl: "https://placedog.net/800/600?id=3",
     traits: ["Playful", "Curious", "Good with dogs"],
     blurb: "Always ready for an adventure and a snack.",
@@ -63,6 +82,11 @@ const PETS = [
     ageMonths: 96,
     ageGroup: "Senior",
     size: "Small",
+    energyLevel: "Low",
+    goodForApartments: "yes",
+    goodWithKids: "no",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Independent", "Quiet home", "Litter trained"],
     blurb: "Enjoys sunny windows and supervising household activities.",
@@ -75,9 +99,14 @@ const PETS = [
     ageMonths: 36,
     ageGroup: "Adult",
     size: "Medium",
+    energyLevel: "High",
+    goodForApartments: "no",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "High",
     imageUrl: "https://placedog.net/800/600?id=4",
     traits: ["Energetic", "Smart", "Good with teens"],
-    blurb: "Can turn any walk into an exciting expedition.",
+    blurb: "Can turn any walk into an exciting adventure.",
   },
   {
     name: "Charlie",
@@ -87,6 +116,11 @@ const PETS = [
     ageMonths: 14,
     ageGroup: "Young",
     size: "Medium",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Moderate",
     imageUrl: "https://placedog.net/800/600?id=5",
     traits: ["Friendly", "Quick learner", "Good with kids"],
     blurb: "A quick learner who loves showing off new tricks.",
@@ -99,6 +133,11 @@ const PETS = [
     ageMonths: 8,
     ageGroup: "Puppy",
     size: "Small",
+    energyLevel: "High",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Playful", "Good with cats", "Kitten energy"],
     blurb: "Will chase anything that moves, including shadows.",
@@ -111,6 +150,11 @@ const PETS = [
     ageMonths: 108,
     ageGroup: "Senior",
     size: "Large",
+    energyLevel: "Low",
+    goodForApartments: "no",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://placedog.net/800/600?id=6",
     traits: ["Gentle", "Patient", "Good with kids"],
     blurb: "A calm companion who loves slow strolls.",
@@ -123,6 +167,11 @@ const PETS = [
     ageMonths: 42,
     ageGroup: "Adult",
     size: "Medium",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "no",
+    goodWithOtherPets: "no",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med&breed_ids=siam",
     traits: ["Social", "Confident", "Good with adults"],
     blurb: "Greets every visitor like they came just for him.",
@@ -135,6 +184,11 @@ const PETS = [
     ageMonths: 72,
     ageGroup: "Adult",
     size: "Small",
+    energyLevel: "Low",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "no",
+    exerciseNeeds: "Low",
     imageUrl: "https://placedog.net/800/600?id=7",
     traits: ["Loving", "Apartment friendly", "Lap dog"],
     blurb: "Tiny body, huge personality.",
@@ -147,6 +201,11 @@ const PETS = [
     ageMonths: 30,
     ageGroup: "Young",
     size: "Large",
+    energyLevel: "High",
+    goodForApartments: "no",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "High",
     imageUrl: "https://placedog.net/800/600?id=8",
     traits: ["Goofy", "Active", "Good with dogs"],
     blurb: "Keeps watch over everyone and everything.",
@@ -159,6 +218,11 @@ const PETS = [
     ageMonths: 24,
     ageGroup: "Young",
     size: "Small",
+    energyLevel: "Low",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "no",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Gentle", "Quiet", "Litter trained"],
     blurb: "Prefers cozy blankets and peaceful afternoons.",
@@ -171,6 +235,11 @@ const PETS = [
     ageMonths: 54,
     ageGroup: "Adult",
     size: "Medium",
+    energyLevel: "High",
+    goodForApartments: "no",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "High",
     imageUrl: "https://placedog.net/800/600?id=9",
     traits: ["Adventurous", "Smart", "Good hiking buddy"],
     blurb: "Would happily hike all day and cuddle all night.",
@@ -183,9 +252,14 @@ const PETS = [
     ageMonths: 120,
     ageGroup: "Senior",
     size: "Medium",
+    energyLevel: "Low",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "no",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med&breed_ids=mcoo",
     traits: ["Affectionate", "Calm", "Good with seniors"],
-    blurb: "An experienced nap expert with a heart of gold.",
+    blurb: "A cuddly buddy who loves attention.",
   },
   {
     name: "Pepper",
@@ -195,9 +269,14 @@ const PETS = [
     ageMonths: 10,
     ageGroup: "Puppy",
     size: "Small",
+    energyLevel: "High",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Moderate",
     imageUrl: "https://placedog.net/800/600?id=10",
     traits: ["Puppy energy", "Good with kids", "Playful"],
-    blurb: "A bright little pup learning manners and loving every minute.",
+    blurb: "A sweet little pup learning manners and loving every minute.",
   },
   {
     name: "Simba",
@@ -207,6 +286,11 @@ const PETS = [
     ageMonths: 36,
     ageGroup: "Adult",
     size: "Medium",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Friendly", "Good with cats", "Litter trained"],
     blurb: "A confident tabby who loves head scratches.",
@@ -219,9 +303,14 @@ const PETS = [
     ageMonths: 66,
     ageGroup: "Adult",
     size: "Medium",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "no",
+    goodWithOtherPets: "no",
+    exerciseNeeds: "Moderate",
     imageUrl: "https://placedog.net/800/600?id=11",
     traits: ["Affectionate", "House trained", "Good with adults"],
-    blurb: "A couch buddy with a big smile and bigger heart.",
+    blurb: "A couch buddy who loves to be loved.",
   },
   {
     name: "Jasper",
@@ -231,6 +320,11 @@ const PETS = [
     ageMonths: 72,
     ageGroup: "Adult",
     size: "Small",
+    energyLevel: "Low",
+    goodForApartments: "yes",
+    goodWithKids: "no",
+    goodWithOtherPets: "no",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med&breed_ids=rblu",
     traits: ["Quiet", "Independent", "Apartment friendly"],
     blurb: "A peaceful roommate who enjoys a steady routine.",
@@ -243,6 +337,11 @@ const PETS = [
     ageMonths: 28,
     ageGroup: "Young",
     size: "Small",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Moderate",
     imageUrl: "https://placedog.net/800/600?id=12",
     traits: ["Cheerful", "Good with kids", "Good with dogs"],
     blurb: "Short legs, huge enthusiasm, and lots of tail wags.",
@@ -255,6 +354,11 @@ const PETS = [
     ageMonths: 6,
     ageGroup: "Puppy",
     size: "Small",
+    energyLevel: "High",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Kitten energy", "Playful", "Good with cats"],
     blurb: "A tiny explorer who turns every box into a playground.",
@@ -267,9 +371,14 @@ const PETS = [
     ageMonths: 84,
     ageGroup: "Adult",
     size: "Large",
+    energyLevel: "Low",
+    goodForApartments: "no",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://placedog.net/800/600?id=13",
     traits: ["Gentle giant", "Calm", "Good with kids"],
-    blurb: "Big paws, soft eyes, and a very relaxed approach to life.",
+    blurb: "Big paws but super sweet personality.",
   },
   {
     name: "Poppy",
@@ -279,6 +388,11 @@ const PETS = [
     ageMonths: 48,
     ageGroup: "Adult",
     size: "Small",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "no",
+    goodWithOtherPets: "no",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Curious", "Litter trained", "Good with adults"],
     blurb: "A clever girl who likes toys, treats, and her own sunny spot.",
@@ -291,9 +405,14 @@ const PETS = [
     ageMonths: 132,
     ageGroup: "Senior",
     size: "Medium",
+    energyLevel: "Low",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://placedog.net/800/600?id=14",
     traits: ["Senior sweetheart", "Calm", "Good with seniors"],
-    blurb: "A slow-walking gentleman who appreciates soft beds.",
+    blurb: "A slow-walking senior who appreciates soft beds.",
   },
   {
     name: "Maggie",
@@ -303,9 +422,14 @@ const PETS = [
     ageMonths: 18,
     ageGroup: "Young",
     size: "Large",
+    energyLevel: "Medium",
+    goodForApartments: "no",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Moderate",
     imageUrl: "https://placedog.net/800/600?id=15",
     traits: ["Friendly", "Good with kids", "Good with dogs"],
-    blurb: "A sunny young dog who makes friends everywhere she goes.",
+    blurb: "A happy young dog who makes friends everywhere she goes.",
   },
   {
     name: "Ziggy",
@@ -315,6 +439,11 @@ const PETS = [
     ageMonths: 20,
     ageGroup: "Young",
     size: "Small",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Playful", "Social", "Litter trained"],
     blurb: "A silly, social cat who likes to be part of the action.",
@@ -327,6 +456,11 @@ const PETS = [
     ageMonths: 40,
     ageGroup: "Adult",
     size: "Large",
+    energyLevel: "High",
+    goodForApartments: "no",
+    goodWithKids: "no",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "High",
     imageUrl: "https://placedog.net/800/600?id=16",
     traits: ["Active", "Talkative", "Good with experienced owners"],
     blurb: "A smart, energetic dog who loves enrichment and adventure.",
@@ -339,6 +473,11 @@ const PETS = [
     ageMonths: 156,
     ageGroup: "Senior",
     size: "Small",
+    energyLevel: "Low",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "no",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Senior sweetheart", "Quiet home", "Affectionate"],
     blurb: "A soft senior cat looking for a peaceful lap.",
@@ -351,6 +490,11 @@ const PETS = [
     ageMonths: 7,
     ageGroup: "Puppy",
     size: "Small",
+    energyLevel: "High",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Moderate",
     imageUrl: "https://placedog.net/800/600?id=17",
     traits: ["Puppy energy", "Playful", "Good with dogs"],
     blurb: "A little adventurer learning the world one sniff at a time.",
@@ -363,74 +507,16 @@ const PETS = [
     ageMonths: 60,
     ageGroup: "Adult",
     size: "Medium",
+    energyLevel: "Medium",
+    goodForApartments: "yes",
+    goodWithKids: "yes",
+    goodWithOtherPets: "yes",
+    exerciseNeeds: "Low",
     imageUrl: "https://api.thecatapi.com/v1/images/search?format=src&mime_types=jpg&size=med",
     traits: ["Affectionate", "Good with kids", "Litter trained"],
     blurb: "A warm, friendly cat who likes gentle attention.",
   },
 ];
-
-async function getOrCreateSeedAdmin() {
-  const adminEmail = "seed-shelter-admin@perfectpaw.local";
-
-  let adminUser = await User.findOne({ email: adminEmail });
-
-  if (!adminUser) {
-    adminUser = await User.create({
-      fullName: "Seed Shelter Admin",
-      email: adminEmail,
-      passwordHash: "seed-placeholder-hash",
-      role: "shelter_admin",
-      isActive: true,
-    });
-    console.log("Created seed shelter admin user.");
-  } else {
-    console.log("Using existing seed shelter admin user.");
-  }
-
-  return adminUser;
-}
-
-async function getOrCreateSeedShelter(adminUserId) {
-  let shelter = await Shelter.findOne({ adminUserId });
-
-  if (!shelter) {
-    shelter = await Shelter.create({
-      adminUserId,
-      name: "PerfectPaw Seed Shelter",
-      contactEmail: "seed-shelter-admin@perfectpaw.local",
-      contactPhone: "",
-      city: "New York",
-      state: "NY",
-      isVerified: true,
-      approvalStatus: "approved",
-    });
-    console.log("Created seed shelter.");
-  } else {
-    shelter.approvalStatus = "approved";
-    shelter.isVerified = true;
-    await shelter.save();
-    console.log("Using existing seed shelter.");
-  }
-
-  return shelter;
-}
-
-function buildPetDocuments(shelterId) {
-  return PETS.map((pet) => ({
-    shelterId,
-    name: pet.name,
-    species: pet.species,
-    breed: pet.breed,
-    sex: pet.sex,
-    ageMonths: pet.ageMonths,
-    ageGroup: pet.ageGroup,
-    size: pet.size,
-    imageUrl: pet.imageUrl,
-    traits: pet.traits,
-    blurb: pet.blurb,
-    status: "available",
-  }));
-}
 
 async function seedPets() {
   const mongoUri = process.env.MONGO_URI || "";
@@ -439,19 +525,39 @@ async function seedPets() {
     throw new Error("Missing MONGO_URI in .env");
   }
 
-  console.log("Connecting to MongoDB...");
   await connectMongo(mongoUri);
 
-  const adminUser = await getOrCreateSeedAdmin();
-  const shelter = await getOrCreateSeedShelter(adminUser._id);
+  const perfectPawShelter = await Shelter.findOne({ name: "PerfectPaw Rescue Center" });
+  const luckyDogShelter = await Shelter.findOne({ name: "Lucky Dog Refuge" });
 
-  const petsToInsert = buildPetDocuments(shelter._id);
+  if (!perfectPawShelter || !luckyDogShelter) {
+    throw new Error("Run npm run seed:shelters before npm run seed:pets.");
+  }
 
-  await Pet.deleteMany({ shelterId: shelter._id });
+  const petsToInsert = PETS.map((pet, index) => {
+    if (
+      !pet.energyLevel ||
+      !pet.goodForApartments ||
+      !pet.goodWithKids ||
+      !pet.goodWithOtherPets ||
+      !pet.exerciseNeeds
+    ) {
+      throw new Error(`Missing quiz seed data for ${pet.name}.`);
+    }
+
+    return {
+      shelterId: index % 2 === 0 ? perfectPawShelter._id : luckyDogShelter._id,
+      ...pet,
+      status: "available",
+    };
+  });
+
+  await Pet.deleteMany({
+    shelterId: { $in: [perfectPawShelter._id, luckyDogShelter._id] },
+  });
   const insertedPets = await Pet.insertMany(petsToInsert);
 
   console.log(`Seed complete. Inserted ${insertedPets.length} pets.`);
-  console.log(`Shelter id: ${shelter._id}`);
 }
 
 seedPets()

@@ -20,12 +20,6 @@ const SEED_USERS = [
     isActive: true,
   },
   {
-    fullName: " Adopter Two",
-    email: "seed-adopter-2@perfectpaw.local",
-    role: "adopter",
-    isActive: true,
-  },
-  {
     fullName: " Admin Super Admin",
     email: "gina_super_admin@perfectpaw.com",
     role: "super_admin",
@@ -41,7 +35,7 @@ async function seedUsers() {
   }
 
   await connectMongo(mongoUri);
-  const passwordHash = await bcrypt.hash("Password123!", 10);
+  const passwordHash = await bcrypt.hash("Hello1234!", 10);
 
   const emails = SEED_USERS.map((u) => u.email);
 
