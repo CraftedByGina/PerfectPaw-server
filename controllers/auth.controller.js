@@ -10,6 +10,7 @@ const signToken = (user, jwtSecret) =>
       sub: String(user._id),
       role: user.role,
       email: user.email,
+      fullName: user.fullName,
     },
     jwtSecret,
     { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
@@ -122,6 +123,7 @@ const register = async (req, res, next) => {
         email: user.email,
         role: user.role,
         shelterId:shelter? shelter._id: "",
+        shelterName: shelter? shelter.name: "",
         shelterStatus: shelter? shelter.approvalStatus: ""
       },
     });
@@ -168,6 +170,10 @@ const login = async (req, res, next) => {
       });
     }
 
+    const shelter = user.role === "shelter_admin"
+      ? await Shelter.findOne({ adminUserId: user._id }).select("_id name approvalStatus")
+      : null;
+
     const token = jwt.sign(
       {
         sub: String(user._id),
@@ -185,6 +191,9 @@ const login = async (req, res, next) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
+        shelterId: shelter?._id || "",
+        shelterName: shelter?.name || "",
+        shelterStatus: shelter?.approvalStatus || "",
       },
     });
   } catch (error) {

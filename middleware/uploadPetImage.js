@@ -1,11 +1,13 @@
 const multer = require("multer");
 
 const imageStorage = multer.memoryStorage();
+const maxPetImageSizeMb = 15;
+const maxPetImageSizeBytes = maxPetImageSizeMb * 1024 * 1024;
 
 const petImageUpload = multer({
   storage: imageStorage,
   limits: {
-    fileSize: 5 * 1024 * 1024,
+    fileSize: maxPetImageSizeBytes,
   },
   fileFilter: (req, file, callback) => {
     if (file.mimetype.startsWith("image/")) {
@@ -22,6 +24,10 @@ const uploadPetImage = (req, res, next) => {
     if (!error) {
       next();
       return;
+    }
+
+    if (error.code === "LIMIT_FILE_SIZE") {
+      error.message = `Uploaded pet photo must be smaller than ${maxPetImageSizeMb} MB.`;
     }
 
     error.statusCode = 400;
